@@ -4,7 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.NumberFormat;
 
@@ -49,12 +51,14 @@ public class MainActivity extends AppCompatActivity {
      * @return text summary
      */
     private String createOrderSummary(int price, boolean addWhippedCream, boolean addChocolate) {
-        String priceMessage = "Name: Lyla the Labyrinth";
-        priceMessage += "\nAdd whipped cream? " + addWhippedCream;
-        priceMessage += "\nAdd chocolate? " + addChocolate;
-        priceMessage += "\nQuantity : " + quantity;
-        priceMessage += "\nTotal: $" + price;
-        priceMessage += "\nThank you!";
+        EditText clientName = (EditText) findViewById(R.id.name_field);
+
+        String priceMessage = getResources().getString(R.string.client_name) + " " + clientName.getText().toString();
+        priceMessage += "\n" + getResources().getString(R.string.question_cream) + " " + addWhippedCream;
+        priceMessage += "\n" + getResources().getString(R.string.question_chocolate) + " " + addChocolate;
+        priceMessage += "\n" + getResources().getString(R.string.quantity) + ": " + quantity;
+        priceMessage += "\n" + getResources().getString(R.string.total) + ": $" + price;
+        priceMessage += "\n" + getResources().getString(R.string.thank_you);
 
         return priceMessage;
     }
@@ -85,11 +89,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void increment(View view) {
+        if (quantity == 100) {
+            Toast.makeText(this, "You cannot have more 100 coffees", Toast.LENGTH_SHORT).show();
+            return;
+        }
         quantity++;
         display(quantity);
     }
 
     public void decrement(View view) {
+        if (quantity == 0) {
+            Toast.makeText(this, "You cannot have less 1 coffee", Toast.LENGTH_SHORT).show();
+            return;
+        }
         quantity--;
         display(quantity);
     }
